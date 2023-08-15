@@ -16,6 +16,7 @@
 #include "clang/Driver/Driver.h"
 #include "clang/Driver/Options.h"
 #include "clang/Driver/Tool.h"
+#include "clang/Frontend/CompilerInvocation.h"
 #include "clang/Frontend/CompilerInstance.h"
 #include "clang/Frontend/FrontendDiagnostic.h"
 #include "clang/Frontend/Utils.h"
@@ -23,6 +24,8 @@
 #include "llvm/ADT/StringRef.h"
 #include "llvm/Option/ArgList.h"
 #include "llvm/Support/Host.h"
+#include <string>
+
 using namespace clang;
 using namespace llvm::opt;
 
@@ -42,6 +45,10 @@ clang::createInvocation(ArrayRef<const char *> ArgList,
           Args, [](const char *Elem) { return llvm::StringRef(Elem) == "--"; }),
       "-fsyntax-only");
 
+    for (auto & It : Args) {
+        llvm::outs() << std::string(It) << "\n";
+    }
+    
   // FIXME: We shouldn't have to pass in the path info.
   driver::Driver TheDriver(Args[0], llvm::sys::getDefaultTargetTriple(), *Diags,
                            "clang LLVM compiler", Opts.VFS);
